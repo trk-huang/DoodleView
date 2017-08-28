@@ -2,12 +2,16 @@ package com.sunhdj.doodlebundle;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.Window;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,12 +19,26 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog colorDialog;
     AlertDialog actionDialog;
     AlertDialog sizeDialog;
+    int contentTop ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mDoodleView = (DoodleView) this.findViewById(R.id.doodleView);
+        mDoodleView.post(new Runnable() {
+            @Override
+            public void run() {
+                contentTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+                mDoodleView.setContentTop(contentTop);
+            }
+        });
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+
     }
 
     @Override

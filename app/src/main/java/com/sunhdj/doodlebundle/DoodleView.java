@@ -5,19 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Environment;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.Window;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
 
 /**
  * Created by huangdaju on 17/8/18.
@@ -35,6 +34,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback {
     private Type type = Type.PATH;
     private Bitmap mBitmap;
     private Context mContext;
+    private int contentTop;
 
     public DoodleView(Context context) {
         super(context);
@@ -50,7 +50,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attrs, defStyleAttr);
     }
 
-
+    int titleBarHeight = 0;
     private void initView() {
         mSurfaceHolder = this.getHolder();
         mSurfaceHolder.addCallback(this);
@@ -58,6 +58,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback {
         mPaint = new Paint();
         mPaint.setColor(Color.WHITE);
         mPaint.setStrokeWidth(currentSize);
+
     }
 
     @Override
@@ -91,11 +92,15 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback {
         this.type = type;
     }
 
+    public void setContentTop(int contentTop) {
+        this.contentTop = contentTop;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
         float touchX = event.getRawX();
-        float touchY = event.getRawY();
+        float touchY = event.getRawY() - contentTop;
 
         switch (action) {
             case MotionEvent.ACTION_CANCEL:
